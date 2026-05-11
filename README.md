@@ -9,13 +9,12 @@
 ![SQLite](https://img.shields.io/badge/Database-SQLite-orange)
 
 
----
 
-## 🎥 Live Workflow Demo
+## 🎥 Project Workflow Video
 
-👉 Full working demo video will be added after deployment.
+👉 Complete end-to-end workflow showcasing resume parsing, JD matching, candidate scoring, ranking, and report generation.
 
-[▶️ Watch Demo (Coming Soon)](#)
+[▶️ Watch Full Workflow Video](https://youtu.be/pCpgCtsX9Cc)
 
 📌 The video will showcase:
 - Resume upload
