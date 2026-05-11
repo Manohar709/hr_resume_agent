@@ -30,8 +30,8 @@
 ![Upload](assets/UI.png)
 
 ## Ranked Candidate Dashboard
-![Dashboard](assets\candidate_ranking_dashboard01.png)
-![Dashboard](assets\candidate_ranking_dashboard02.png)
+![Dashboard](assets/candidate_ranking_dashboard01.png)
+![Dashboard](assets/candidate_ranking_dashboard02.png)
 
 
 
