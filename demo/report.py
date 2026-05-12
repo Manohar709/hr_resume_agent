@@ -219,101 +219,39 @@ def generate_pdf_report(
             story.append(Paragraph(llm_summary["executive_summary"], styles["Normal"]))
             story.append(Spacer(1, 4*mm))
 
-        # Candidate table
-        story.append(Paragraph("Candidate Rankings", styles["Heading2"]))
-        story.append(Spacer(1, 2*mm))
+        # # Candidate table
+        # story.append(Paragraph("Candidate Rankings", styles["Heading2"]))
+        # story.append(Spacer(1, 2*mm))
 
-        # Professional wrapped-text style
-        body_style = ParagraphStyle(
-            "BodyStyle",
-            parent=styles["BodyText"],
-            fontSize=8,
-            leading=10,
-        )
+        # table_data = [["#", "Name", "Score", "Decision", "Key Strength", "Key Weakness"]]
+        # for rank, score, override in ranked:
+        #     eff_score = override.get("new_score", score.total_weighted_score)
+        #     strength = score.strengths[0] if score.strengths else "—"
+        #     weakness = score.weaknesses[0] if score.weaknesses else "—"
+        #     name = score.candidate_name
+        #     if override:
+        #         name += " ★"
+        #     table_data.append([
+        #         str(rank), name, f"{eff_score:.1f}/10",
+        #         score.recommendation, strength[:40], weakness[:40]
+        #     ])
 
-        table_data = [[
-            Paragraph("<b>#</b>", body_style),
-            Paragraph("<b>Name</b>", body_style),
-            Paragraph("<b>Score</b>", body_style),
-            Paragraph("<b>Decision</b>", body_style),
-            Paragraph("<b>Key Strength</b>", body_style),
-            Paragraph("<b>Key Weakness</b>", body_style),
-        ]]
-
-        for rank, score, override in ranked:
-            eff_score = override.get("new_score", score.total_weighted_score)
-
-            strength = (
-                "• " + "<br/>• ".join(score.strengths[:2])
-                if score.strengths else "—"
-            )
-
-            weakness = (
-                "• " + "<br/>• ".join(score.weaknesses[:2])
-                if score.weaknesses else "—"
-            )
-
-            name = score.candidate_name
-            if override:
-                name += " ★"
-
-            table_data.append([
-                Paragraph(str(rank), body_style),
-                Paragraph(name, body_style),
-                Paragraph(f"{eff_score:.1f}/10", body_style),
-                Paragraph(score.recommendation, body_style),
-                Paragraph(strength, body_style),
-                Paragraph(weakness, body_style),
-            ])
-
-        # Better column widths for readability
-        col_widths = [
-            12*mm,   # Rank
-            35*mm,   # Name
-            18*mm,   # Score
-            25*mm,   # Decision
-            50*mm,   # Strength
-            50*mm,   # Weakness
-        ]
-
-        t = Table(
-            table_data,
-            colWidths=col_widths,
-            repeatRows=1
-        )
-
-        t.setStyle(TableStyle([
-            # Header
-            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1e3a8a")),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-
-            # Font
-            ("FONTSIZE", (0, 0), (-1, -1), 8),
-
-            # Alignment
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("ALIGN", (0, 0), (0, -1), "CENTER"),
-            ("ALIGN", (2, 0), (3, -1), "CENTER"),
-
-            # Row styling
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [
-                colors.white,
-                colors.HexColor("#f0f4ff")
-            ]),
-
-            # Grid
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
-
-            # Padding
-            ("TOPPADDING", (0, 0), (-1, -1), 6),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-            ("LEFTPADDING", (0, 0), (-1, -1), 5),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-        ]))
-
-        story.append(t)
-        story.append(Spacer(1, 6*mm))
+        # col_widths = [15*mm, 45*mm, 20*mm, 22*mm, 45*mm, 45*mm]
+        # t = Table(table_data, colWidths=col_widths, repeatRows=1)
+        # t.setStyle(TableStyle([
+        #     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1e3a8a")),
+        #     ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        #     ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        #     ("FONTSIZE", (0, 0), (-1, -1), 9),
+        #     ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f0f4ff")]),
+        #     ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#d1d5db")),
+        #     ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        #     ("PADDING", (0, 0), (-1, -1), 6),
+        # ]))
+        # story.append(t)
+        # story.append(Spacer(1, 6*mm))
+        
+        
 
         # Individual detail sections
         for rank, score, override in ranked[:5]:  # Top 5 detailed

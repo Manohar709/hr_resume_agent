@@ -14,7 +14,7 @@
 
 👉 Complete end-to-end workflow showcasing resume parsing, JD matching, candidate scoring, ranking, and report generation.
 
-[▶️ Watch Full Workflow Video](https://youtu.be/pCpgCtsX9Cc)
+[▶️ Watch Full Workflow Video](https://youtu.be/qyCNUYqVfB4)
 
 📌 The video will showcase:
 - Resume upload
@@ -55,7 +55,7 @@ These logs provide visibility into model behavior, latency, and intermediate out
 
 ### 📸 Sample Log Output
 
-![System Logs](assets/log.png)
+![System Logs](assets/human_readable_log_file.png)
 
 > The above log demonstrates real-time execution of the multi-agent pipeline, including document parsing (Docling), resume analysis (Gemini), semantic similarity computation, and final scoring workflow.
 
@@ -212,18 +212,16 @@ hr_resume_agent/
 
 # 📋 Technical Stack & Decision Log
 
-| Component | Choice | Why This Choice? |
+| Component | Technology Chosen | Why This Choice? |
 |---|---|---|
-| LLM | Gemini 2.0 Flash | Fast inference, low latency, cost-effective |
-| Agent Framework | LangChain | Strong ecosystem and modular orchestration |
-| Embeddings | MiniLM-L6-v2 | Lightweight and accurate local embeddings |
-| Validation | Pydantic v2 | Reliable schema enforcement for LLM outputs |
-| Database | SQLite | Zero-config local persistence |
-| UI | Streamlit | Fast prototyping without frontend complexity |
-PDF Parsing | Docling | Extracts clean structured data from complex and scanned PDFs using OCR and layout-aware parsing.
-| Caching | LangChain SQLiteCache | Reduces unnecessary LLM API calls |
-
----
+| LLM | Gemini 2.0 Flash (Google AI Studio API) | Selected for its low-latency inference, strong reasoning capabilities, large context handling, and cost-efficient API usage compared to heavier enterprise models. It also provides reliable structured output generation and tool-calling support, making it ideal for real-time AI resume screening pipelines. |
+| Agent Framework | LangChain (Latest Stable Version) | Used to build a modular ReAct-style agent orchestration pipeline with tool-calling, validation, memory handling, and multi-step workflow execution. The architecture follows an analyze → reason → validate → rank → generate-report flow for scalable AI agent operations. |
+| Embeddings | MiniLM-L6-v2 | Lightweight yet highly effective embedding model that enables fast semantic similarity search while running efficiently on local systems with minimal computational overhead. |
+| Validation | Pydantic v2 | Ensures strict schema validation and reliable structured outputs from LLM responses, significantly reducing parsing failures, inconsistent outputs, and hallucinated fields. |
+| Database | SQLite | Simple zero-configuration relational database used for lightweight local persistence, caching, report storage, and candidate tracking without requiring external infrastructure. |
+| UI | Streamlit | Enables rapid development of interactive AI dashboards and workflow visualizations without requiring complex frontend engineering or additional API layers. |
+| PDF Parsing | Docling | Used for extracting structured text, tables, OCR-supported content, and layout-aware information from complex resumes while maintaining parsing accuracy across different resume formats. |
+| Caching | LangChain SQLiteCache | Reduces redundant LLM API calls through persistent local response caching, improving overall performance, response speed, and operational cost efficiency. |
 
 # 🤖 Agent Architecture
 
@@ -341,62 +339,7 @@ This enables:
 - Performance analysis
 - Failure tracing
 
----
 
-# 🗃️ Database Schema
-
-```sql
-CREATE TABLE file_hashes (
-    file_hash TEXT PRIMARY KEY,
-    filename  TEXT,
-    added_at  TEXT DEFAULT (datetime('now'))
-);
-
-CREATE TABLE processed_resumes (
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    file_hash      TEXT UNIQUE NOT NULL,
-    filename       TEXT,
-    candidate_name TEXT,
-    profile_json   TEXT,
-    jd_hash        TEXT,
-    processed_at   TEXT DEFAULT (datetime('now'))
-);
-
-CREATE TABLE candidate_scores (
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    file_hash      TEXT,
-    candidate_name TEXT,
-    total_score    REAL,
-    score_json     TEXT,
-    jd_hash        TEXT,
-    scored_at      TEXT DEFAULT (datetime('now')),
-    UNIQUE(file_hash, jd_hash)
-);
-
-CREATE TABLE overrides (
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    file_hash      TEXT,
-    candidate_name TEXT,
-    old_score      REAL,
-    new_score      REAL,
-    reason         TEXT,
-    override_by    TEXT DEFAULT 'HR Manager',
-    created_at     TEXT DEFAULT (datetime('now'))
-);
-
-CREATE TABLE processing_logs (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    stage      TEXT,
-    model_name TEXT,
-    latency_ms REAL,
-    token_usage TEXT,
-    error      TEXT,
-    extra      TEXT,
-    logged_at  TEXT DEFAULT (datetime('now'))
-);
-```
-
----
 
 # 🚀 Quick Start
 
